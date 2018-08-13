@@ -5,62 +5,53 @@ import (
 	"fmt"
 )
 
-// Word contains the text string of the word and its related words that i can murph into.
+// Word contains the text string of the word and its sibling words that it can murph into.
 type Word struct {
-	Text        string
-	LinkedWords []*Word
-	Visited     bool
+	Text     string
+	Siblings []*Word
+	Visited  bool
 }
 
-// NewWord does
+// NewWord creates a new word
 func NewWord(text string) *Word {
 	return &Word{
-		Text:        text,
-		LinkedWords: []*Word{},
-		Visited:     false,
+		Text:     text,
+		Siblings: []*Word{},
+		Visited:  false,
 	}
 }
 
-// WordMap is
-type WordMap map[string]*Word
+// AllWords contains a map of all words
+type AllWords map[string]*Word
 
-// WordLink is part of WordLinkMap. By looking up a substring from WordLinkMap,
-// an array of WordLinks is found. The position of the array is the position where
-// the letter being substituted for that particular WordLink
-type WordLink []*Word
-
-// WordLinkMap maps substrings to an array of WordLinks. The index of WordLink array represents
-// the position of the letter being substituted for that WordLink.
-type WordLinkMap map[string][]WordLink
-
-// BuildWordLinkMapFromWords creates a WordLinkMap out of a WordMap
-func (wm *WordMap) BuildWordLinkMapFromWords() *WordLinkMap {
-	wlm := WordLinkMap{}
+// BuildWordSiblingFinder creates a WordSiblingFinder that can be used to connect each sibling for each word.
+func (aw *AllWords) BuildWordSiblingFinder() *WordSiblingFinder {
+	wsf := WordSiblingFinder{}
 
 	fmt.Println("Building WordMap...")
-	fmt.Printf("There are %d words in this dictionary\n", len(*wm)) // debug
+	fmt.Printf("There are %d words in this dictionary\n", len(*aw)) // debug
 
 	// iterate thru each word
-	for w, wObj := range *wm {
+	for wtext, w := range *aw {
 
-		wlen := len(w) // length of the current word
+		wlen := len(wtext) // length of the current word
 
 		// iterate thru each letter in that word.
 		for idx := 0; idx < wlen; idx++ {
-			substr := w[:idx] + w[idx+1:]
-			if wlm[substr] == nil {
-				wlm[substr] = make([]WordLink, wlen, wlen)
+			substr := wtext[:idx] + wtext[idx+1:]
+			if wsf[substr] == nil {
+				wsf[substr] = make([]WordSiblingGroup, wlen, wlen)
 			}
 
-			wlm[substr][idx] = append(wlm[substr][idx], wObj)
+			wsf[substr][idx] = append(wsf[substr][idx], w)
 		}
 	}
-	return &wlm
+	return &wsf
 }
 
-// ChainWords does
-func (wm *WordMap) ChainWords(wstr1 string, wstr2 string) {
-	w1 := (*wm)[wstr1]
+// ChainWords find the shortest path from one word to another
+func (aw *AllWords) ChainWords(wstr1 string, wstr2 string) {
+	w1 := (*aw)[wstr1]
 
 	l := list.New()
 	type node struct {
@@ -84,7 +75,7 @@ func (wm *WordMap) ChainWords(wstr1 string, wstr2 string) {
 		// if len(currentTodo.parents) == 2 {
 		// 	fmt.Println(currentTodo.this.Text)
 		// }
-		for _, w := range currentTodo.this.LinkedWords {
+		for _, w := range currentTodo.this.Siblings {
 			l.PushBack(node{this: w, parents: append(currentTodo.parents, currentTodo.this)})
 		}
 		currentTodo.this.Visited = true
@@ -103,15 +94,23 @@ func (wm *WordMap) ChainWords(wstr1 string, wstr2 string) {
 	fmt.Println(wstr2)
 }
 
-// ConnectWords does
-func (wlm *WordLinkMap) ConnectWords() {
+// WordSiblingGroup is part of WordSiblingFinder. By looking up a substring from WordSiblingFinder,
+// an array of WordSiblingGroup is found. The position of the array is the position where
+// the letter being substituted for that particular WordSiblingGroup
+type WordSiblingGroup []*Word
 
-	for _, wls := range *wlm { // ss: SubString, wls: WordLinkS
-		for _, wl := range wls {
-			for widx, w := range wl {
+// WordSiblingFinder maps substrings to an array of WordSiblingGroups. The index of WordSibling array represents
+// the position of the letter being substituted for that WordSibling.
+type WordSiblingFinder map[string][]WordSiblingGroup
 
-				w.LinkedWords = append(w.LinkedWords, wl[:widx]...)
-				w.LinkedWords = append(w.LinkedWords, wl[widx+1:]...)
+// ConnectSiblings connects all word siblings
+func (wsf *WordSiblingFinder) ConnectSiblings() {
+
+	for _, wsgs := range *wsf { // wsgs: WordSiblingGroups
+		for _, wsg := range wsgs {
+			for widx, w := range wsg {
+				w.Siblings = append(w.Siblings, wsg[:widx]...)
+				w.Siblings = append(w.Siblings, wsg[widx+1:]...)
 			}
 		}
 	}

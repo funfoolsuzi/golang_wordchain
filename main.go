@@ -25,15 +25,15 @@ func main() {
 
 	// Transfer all the keys from the map to a WordMap.
 	// Because we only need the keys(words)
-	wm := &words.WordMap{}
+	allwords := &words.AllWords{}
 	for k := range *dictMap {
 		lower := strings.ToLower(k)
-		(*wm)[lower] = words.NewWord(lower)
+		(*allwords)[lower] = words.NewWord(lower)
 		delete(*dictMap, k)
 	}
 
-	wlm := wm.BuildWordLinkMapFromWords()
-	wlm.ConnectWords()
+	wlm := allwords.BuildWordSiblingFinder()
+	wlm.ConnectSiblings()
 
-	wm.ChainWords("cat", "dog")
+	allwords.ChainWords("cat", "dog")
 }
