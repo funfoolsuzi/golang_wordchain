@@ -98,22 +98,20 @@ func (aw *AllWords) FindChain(wstr1 string, wstr2 string) {
 	l.PushBack(node{this: w1, parents: []*Word{}})
 	for l.Len() != 0 {
 		currentElem := l.Front()
-		currentTodo := currentElem.Value.(node)
-		if currentTodo.this.Visited {
+		currentNode := currentElem.Value.(node)
+		if currentNode.this.Visited {
 			l.Remove(currentElem)
 			continue
 		}
-		if currentTodo.this.Text == wstr2 {
-			res = &currentTodo
+		if currentNode.this.Text == wstr2 {
+			res = &currentNode
 			break
 		}
-		// if len(currentTodo.parents) == 2 {
-		// 	fmt.Println(currentTodo.this.Text)
-		// }
-		for _, w := range currentTodo.this.Siblings {
-			l.PushBack(node{this: w, parents: append(currentTodo.parents, currentTodo.this)})
+
+		for _, w := range currentNode.this.Siblings {
+			l.PushBack(node{this: w, parents: append(currentNode.parents, currentNode.this)})
 		}
-		currentTodo.this.Visited = true
+		currentNode.this.Visited = true
 		l.Remove(currentElem)
 	}
 

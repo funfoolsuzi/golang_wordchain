@@ -4,9 +4,9 @@
 
 1. Get the dictionary. Map it. List all the words in a data model to keep track.
 
-2. A _Siblingship_ is the ability to change one letter of a word to murph into another word.
+2. A _Siblingship_ is the ability of a word to change one of its letters to murph into another word.
 
-3. Try to construct an [undirected graph](https://en.wikipedia.org/wiki/Graph_(discrete_mathematics)#Undirected_graph) with __Word__ as _vertex_ and __Siblingship__ as _edge_.
+3. Try to construct an [undirected graph](https://en.wikipedia.org/wiki/Graph_(discrete_mathematics)#Undirected_graph) with __Word__ as _vertex_ and __Siblingship__ as _edge_. (_actually this could be multiple graphs_)
 
 4. Use [BFS](https://en.wikipedia.org/wiki/Breadth-first_search), Breadth-First Search to find the shortest path between two words.
 
@@ -37,6 +37,11 @@ WordSiblingFinder {
 }
 ```
 
-3. Once the _WordSiblingFinder_ has been filled out completed based on the dictionary. We can connect each _Word_ within each _WordSiblingGroup_. We loop thru each substring key in _WordSiblingFinder_. Under each substring key, we then loop thru each position where letter has been taken out. Under each position, We have a WordSiblingGroup. We make sure all the Words in that WordSiblingGroup connect with their Siblings. After this is done. The graph is complete.
+3. Once the _WordSiblingFinder_ has been filled out completed based on the dictionary. We can connect each _Word_ within each _WordSiblingGroup_. We loop thru each substring key in _WordSiblingFinder_. Under each substring key, we then loop thru each position where letter has been taken out. Under each position, We have a WordSiblingGroup. We make sure all the Words in that WordSiblingGroup connect with their Siblings. After this is done. The "graph" is complete.
 
 4. Run BFS on this graph.
+
+#### TODO:
+1. Replace golang build-in list with a custom Queue.
+2. Add command-line user interface.
+3. Category this "graph" into multiple graphs. Because this "graph" could actually be multiple graphs. And this will reduce the complexity on finding if two words are actually even reachable to each other.
