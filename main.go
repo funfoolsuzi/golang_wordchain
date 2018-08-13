@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"strings"
 
 	"github.com/funfoolsuzi/golang_wordchain/helper"
 	"github.com/funfoolsuzi/golang_wordchain/words"
@@ -25,15 +24,10 @@ func main() {
 
 	// Transfer all the keys from the map to a WordMap.
 	// Because we only need the keys(words)
-	allwords := &words.AllWords{}
-	for k := range *dictMap {
-		lower := strings.ToLower(k)
-		(*allwords)[lower] = words.NewWord(lower)
-		delete(*dictMap, k)
-	}
+	allwords := words.CreateAllWords(dictMap)
 
 	wlm := allwords.BuildWordSiblingFinder()
 	wlm.ConnectSiblings()
 
-	allwords.ChainWords("cat", "dog")
+	allwords.FindChain("cat", "dog")
 }

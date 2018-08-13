@@ -3,6 +3,7 @@ package words
 import (
 	"container/list"
 	"fmt"
+	"strings"
 )
 
 // Word contains the text string of the word and its sibling words that it can murph into.
@@ -21,24 +22,58 @@ func NewWord(text string) *Word {
 	}
 }
 
+// CreateAllWords creates an Allwords instance and return its pointer
+func CreateAllWords(dictMap *map[string][]string) *AllWords {
+	words := []*Word{}
+	for k := range *dictMap {
+		lower := strings.ToLower(k)
+		words = append(words, NewWord(lower))
+		delete(*dictMap, k)
+	}
+	return &AllWords{
+		words:            words,
+		siblingConnected: false,
+		reset:            false,
+	}
+}
+
 // AllWords contains a map of all words
-type AllWords map[string]*Word
+type AllWords struct {
+	words            []*Word
+	siblingConnected bool
+	reset            bool
+}
+
+// Find does
+func (aw *AllWords) Find(wtext string) *Word {
+	for _, w := range aw.words {
+		if w.Text == wtext {
+			return w
+		}
+	}
+	return nil
+}
+
+// Count returns the size of AllWords
+func (aw *AllWords) Count() int {
+	return len(aw.words)
+}
 
 // BuildWordSiblingFinder creates a WordSiblingFinder that can be used to connect each sibling for each word.
 func (aw *AllWords) BuildWordSiblingFinder() *WordSiblingFinder {
 	wsf := WordSiblingFinder{}
 
 	fmt.Println("Building WordMap...")
-	fmt.Printf("There are %d words in this dictionary\n", len(*aw)) // debug
+	fmt.Printf("There are %d words in this dictionary\n", aw.Count()) // debug
 
 	// iterate thru each word
-	for wtext, w := range *aw {
+	for _, w := range aw.words {
 
-		wlen := len(wtext) // length of the current word
+		wlen := len(w.Text) // length of the current word
 
 		// iterate thru each letter in that word.
 		for idx := 0; idx < wlen; idx++ {
-			substr := wtext[:idx] + wtext[idx+1:]
+			substr := w.Text[:idx] + w.Text[idx+1:]
 			if wsf[substr] == nil {
 				wsf[substr] = make([]WordSiblingGroup, wlen, wlen)
 			}
@@ -49,9 +84,9 @@ func (aw *AllWords) BuildWordSiblingFinder() *WordSiblingFinder {
 	return &wsf
 }
 
-// ChainWords find the shortest path from one word to another
-func (aw *AllWords) ChainWords(wstr1 string, wstr2 string) {
-	w1 := (*aw)[wstr1]
+// FindChain find the shortest path from one word to another
+func (aw *AllWords) FindChain(wstr1 string, wstr2 string) {
+	w1 := aw.Find(wstr1)
 
 	l := list.New()
 	type node struct {
