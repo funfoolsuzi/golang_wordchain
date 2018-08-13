@@ -3,8 +3,10 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	"github.com/funfoolsuzi/golang_wordchain/helper"
+	"github.com/funfoolsuzi/golang_wordchain/words"
 )
 
 func main() {
@@ -21,13 +23,17 @@ func main() {
 		panic("Failed to unmarshal dictionary:" + err.Error())
 	}
 
-	// Transfer all the keys from the map to a string slice.
+	// Transfer all the keys from the map to a WordMap.
 	// Because we only need the keys(words)
-	words := []string{}
+	wm := &words.WordMap{}
 	for k := range *dictMap {
-		words = append(words, k)
+		lower := strings.ToLower(k)
+		(*wm)[lower] = words.NewWord(lower)
 		delete(*dictMap, k)
 	}
 
-	fmt.Println(words[0])
+	wlm := wm.BuildWordLinkMapFromWords()
+	wlm.ConnectWords()
+
+	wm.ChainWords("cat", "dog")
 }
