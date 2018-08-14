@@ -29,5 +29,5 @@ func main() {
 	wlm := allwords.BuildWordSiblingFinder()
 	wlm.ConnectSiblings()
 
-	allwords.FindChain("cat", "dog")
+	fmt.Printf("%v\n", allwords.FindChain("cat", "dog"))
 }
