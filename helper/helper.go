@@ -6,8 +6,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
-
-	"github.com/funfoolsuzi/golang_wordchain/words"
 )
 
 // DownloadDictionary downloads the dictionary from github.
@@ -53,39 +51,4 @@ func GetDictionaryBytes() ([]byte, error) {
 	}
 
 	return b, nil
-}
-
-// RunUI runs the command line user interface
-func RunUI(aw *words.AllWords) {
-
-	aw.ResetVisitStatus()
-
-	var w1, w2, res string
-
-	// first word
-	for w1 == "" {
-		fmt.Println("Plz enter the first word")
-		fmt.Scanln(&w1)
-		// TODO: check if in dicitonary
-	}
-
-	// second word
-	for w2 == "" {
-		fmt.Println("Plz enter the second word")
-		fmt.Scanln(&w2)
-		// TODO: check if in dictionary
-	}
-
-	if len(w1) == len(w2) {
-		aw.FindChain(w1, w2)
-	} else {
-		fmt.Println("words with variant length are not supported right now")
-	}
-
-	// try again?
-	fmt.Println("Try again? Press Enter or type \"q\" to quit")
-	fmt.Scanln(&res)
-	if res != "q" {
-		RunUI(aw)
-	}
 }

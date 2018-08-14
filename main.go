@@ -24,12 +24,10 @@ func main() {
 
 	allwords := words.CreateAllWords(dictMap)
 
-	wlm := allwords.BuildWordSiblingFinder()
-	wlm.ConnectSiblings()
-
 	fmt.Println()
 	fmt.Println("Example: \"cat\" to \"dog\"")
+
 	allwords.FindChain("cat", "dog")
 
-	helper.RunUI(allwords)
+	allwords.RunUI()
 }

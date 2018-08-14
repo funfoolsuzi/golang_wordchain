@@ -13,11 +13,16 @@ func CreateAllWords(dictMap *map[string][]string) *AllWords {
 		words = append(words, NewWord(lower))
 		delete(*dictMap, k)
 	}
-	return &AllWords{
+	aw := &AllWords{
 		words:            words,
 		siblingConnected: false,
 		reset:            false,
 	}
+
+	wsf := aw.BuildWordSiblingFinder()
+	wsf.ConnectSiblings()
+
+	return aw
 }
 
 // AllWords contains a map of all words
@@ -112,5 +117,40 @@ func (aw *AllWords) FindChain(wstr1 string, wstr2 string) []string {
 func (aw *AllWords) ResetVisitStatus() {
 	for _, w := range aw.words {
 		w.Visited = false
+	}
+}
+
+// RunUI runs the command line user interface
+func (aw *AllWords) RunUI() {
+
+	aw.ResetVisitStatus()
+
+	var w1, w2, res string
+
+	// first word
+	for w1 == "" {
+		fmt.Print("Plz enter the first word\n>>>")
+		fmt.Scanln(&w1)
+		// TODO: check if in dicitonary
+	}
+
+	// second word
+	for w2 == "" {
+		fmt.Print("Plz enter the second word\n>>>")
+		fmt.Scanln(&w2)
+		// TODO: check if in dictionary
+	}
+
+	if len(w1) == len(w2) {
+		aw.FindChain(w1, w2)
+	} else {
+		fmt.Println("words with variant length are not supported right now")
+	}
+
+	// try again?
+	fmt.Print("Try again? Press \"Enter\" to continue, or type \"q\" to quit\n>>>")
+	fmt.Scanln(&res)
+	if res != "q" {
+		aw.RunUI()
 	}
 }
