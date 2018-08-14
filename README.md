@@ -41,8 +41,10 @@ WordSiblingFinder {
 
 4. Run BFS on this graph.
 
-#### TODO:
+#### Optimization Todos:
 1. ~~Replace golang build-in list with a custom Queue.~~ _DONE_
 2. Words can murph to different length.
-3. Add command-line user interface.
+3. ~~Add command-line user interface.~~ _DONE~
 4. Category this "graph" into multiple graphs. Because this "graph" could actually be multiple graphs. And this will reduce the complexity on finding if two words are actually even reachable to each other.
+5. Unit testing.
+6. Record search time elapsed.

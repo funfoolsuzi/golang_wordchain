@@ -22,12 +22,14 @@ func main() {
 		panic("Failed to unmarshal dictionary:" + err.Error())
 	}
 
-	// Transfer all the keys from the map to a WordMap.
-	// Because we only need the keys(words)
 	allwords := words.CreateAllWords(dictMap)
 
 	wlm := allwords.BuildWordSiblingFinder()
 	wlm.ConnectSiblings()
 
-	fmt.Printf("%v\n", allwords.FindChain("cat", "dog"))
+	fmt.Println()
+	fmt.Println("Example: \"cat\" to \"dog\"")
+	allwords.FindChain("cat", "dog")
+
+	helper.RunUI(allwords)
 }

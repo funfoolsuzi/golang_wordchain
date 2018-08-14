@@ -69,17 +69,24 @@ func (aw *AllWords) BuildWordSiblingFinder() *WordSiblingFinder {
 
 // FindChain find the shortest path from one word to another
 func (aw *AllWords) FindChain(wstr1 string, wstr2 string) []string {
+	fmt.Println()
 	var endNode *Node
 	result := []string{}
 
 	w1 := aw.Find(wstr1)
+	if w1 == nil {
+		fmt.Println(wstr1, " is not found.")
+		return result
+	}
 	w2 := aw.Find(wstr2)
-	if w1 == nil || w2 == nil {
+	if w2 == nil {
+		fmt.Println(wstr2, " is not found.")
 		return result
 	}
 
 	q := NewWordQueue(w1)
 
+	fmt.Printf("Start to search word chain between %s and %s\n", wstr1, wstr2)
 	for q.Count() != 0 {
 		head := q.PopHead()
 		if head.word.Visited {
@@ -94,7 +101,11 @@ func (aw *AllWords) FindChain(wstr1 string, wstr2 string) []string {
 		}
 	}
 
-	return endNode.GetChain()
+	result = endNode.GetChain()
+	fmt.Println(result)
+	fmt.Println()
+
+	return result
 }
 
 // ResetVisitStatus resets 'Visited' in each word to false

@@ -1,5 +1,9 @@
 package words
 
+// This file contains everything for the Queue as a singly linked list.
+// This Queue is customized for the use of Word processing only.
+// This is created simply because Golang built-in list is doubly linked list, which is an overkill for this.
+
 // Node is ...
 type Node struct {
 	word       *Word
