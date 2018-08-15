@@ -1,5 +1,23 @@
 ## WORD CHAIN PROBLEM
 
+#### Setup Guide:
+
+1. Make sure your [GOPATH](https://github.com/golang/go/wiki/GOPATH) is set up. If not follow [this link](https://github.com/golang/go/wiki/GOPATH).
+2. Install this package by
+```
+    go get github.com/funfoolsuzi/golang_wordchain
+```
+3. go to package directory
+```
+    cd $GOPATH/src/https://github.com/golang/go/wiki/GOPATH
+```
+4. run the app
+```
+    go run main.go
+```
+The program will download the dictionary JSON file from the originial git repo on Github.
+
+
 #### Strategy
 
 1. Get the dictionary. Map it. List all the words in a data model to keep track.
