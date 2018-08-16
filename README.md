@@ -11,7 +11,7 @@ The majority of the app is done before the Aug 14th COB deadline. I only changed
 ```
 3. go to package directory
 ```
-    cd $GOPATH/src/github.com/golang/go/wiki/GOPATH
+    cd $GOPATH/src/github.com/funfoolsuzi/golang_wordchain
 ```
 4. run the app
 ```
