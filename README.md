@@ -1,6 +1,8 @@
 ## WORD CHAIN PROBLEM
 
-#### Setup Guide:
+The majority of the app is done before the Aug 14th COB deadline. I only changed documentation and added time elapsed in the result after the deadline. The commit history reflects it. I just found this problem really fun to solve and want to keep on improving this mini app.
+
+### Setup Guide:
 
 1. Make sure your [GOPATH](https://github.com/golang/go/wiki/GOPATH) is set up. If not follow [this link](https://github.com/golang/go/wiki/GOPATH).
 2. Install this package by
@@ -18,7 +20,7 @@
 The program will download the dictionary JSON file from the originial git repo on Github.
 
 
-#### Strategy
+### Strategy
 
 1. Get the dictionary. Map it. List all the words in a data model to keep track.
 
@@ -29,7 +31,7 @@ The program will download the dictionary JSON file from the originial git repo o
 4. Use [BFS](https://en.wikipedia.org/wiki/Breadth-first_search), Breadth-First Search to find the shortest path between two words.
 
 
-#### Implementation
+### Implementation
 
 1. Push all dictionary key(word as a textstring) to an array/list that has a _Word_ struct wrapping around each item. This _Word_ struct contains meta info and a list of Siblings. The list of Sibings are initiated as empty array/list. This list of _Word_(s) is then wrapped by a data struct called _AllWords_.
 
@@ -57,12 +59,13 @@ WordSiblingFinder {
 
 3. Once the _WordSiblingFinder_ has been filled out completed based on the dictionary. We can connect each _Word_ within each _WordSiblingGroup_. We loop thru each substring key in _WordSiblingFinder_. Under each substring key, we then loop thru each position where letter has been taken out. Under each position, We have a WordSiblingGroup. We make sure all the Words in that WordSiblingGroup connect with their Siblings. After this is done. The "graph" is complete.
 
-4. Run BFS on this graph.
+4. Run BFS on this graph. (TODO: add details)
 
-#### Optimization Todos:
+### Optimization Todos:
 1. ~~Replace golang build-in list with a custom Queue.~~ _DONE_
 2. Words can murph to different length.
 3. ~~Add command-line user interface.~~ _DONE~
 4. Category this "graph" into multiple graphs. Because this "graph" could actually be multiple graphs. And this will reduce the complexity on finding if two words are actually even reachable to each other.
 5. Unit testing.
-6. Record search time elapsed.
+6. ~~Record search time elapsed.~~ _DONE_
+7. Finish BFS implementation doc.

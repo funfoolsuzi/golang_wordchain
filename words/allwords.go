@@ -3,6 +3,7 @@ package words
 import (
 	"fmt"
 	"strings"
+	"time"
 )
 
 // CreateAllWords creates an Allwords instance and return its pointer
@@ -16,7 +17,6 @@ func CreateAllWords(dictMap *map[string][]string) *AllWords {
 	aw := &AllWords{
 		words:            words,
 		siblingConnected: false,
-		reset:            false,
 	}
 
 	wsf := aw.BuildWordSiblingFinder()
@@ -29,7 +29,6 @@ func CreateAllWords(dictMap *map[string][]string) *AllWords {
 type AllWords struct {
 	words            []*Word
 	siblingConnected bool
-	reset            bool
 }
 
 // Find does
@@ -49,6 +48,7 @@ func (aw *AllWords) Count() int {
 
 // BuildWordSiblingFinder creates a WordSiblingFinder that can be used to connect each sibling for each word.
 func (aw *AllWords) BuildWordSiblingFinder() *WordSiblingFinder {
+	t := time.Now()
 	wsf := WordSiblingFinder{}
 
 	fmt.Println("Building WordMap...")
@@ -69,11 +69,13 @@ func (aw *AllWords) BuildWordSiblingFinder() *WordSiblingFinder {
 			wsf[substr][idx] = append(wsf[substr][idx], w)
 		}
 	}
+	fmt.Printf("Took %v to build Sibling Finder.", time.Since(t))
 	return &wsf
 }
 
 // FindChain find the shortest path from one word to another
 func (aw *AllWords) FindChain(wstr1 string, wstr2 string) []string {
+	t := time.Now()
 	fmt.Println()
 	var endNode *Node
 	result := []string{}
@@ -107,7 +109,7 @@ func (aw *AllWords) FindChain(wstr1 string, wstr2 string) []string {
 	}
 
 	result = endNode.GetChain()
-	fmt.Println(result)
+	fmt.Println(result, " time elapsed: ", time.Since(t))
 	fmt.Println()
 
 	return result
