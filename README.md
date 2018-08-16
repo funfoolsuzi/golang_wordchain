@@ -9,7 +9,7 @@
 ```
 3. go to package directory
 ```
-    cd $GOPATH/src/https://github.com/golang/go/wiki/GOPATH
+    cd $GOPATH/src/github.com/golang/go/wiki/GOPATH
 ```
 4. run the app
 ```
